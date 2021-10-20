@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+## v1.5.00
+Ongoing refactoring
+
 ## v1.4.01
 Fix dashboard hooks for students and parents
 

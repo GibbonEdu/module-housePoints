@@ -59,3 +59,7 @@ INSERT INTO `gibbonHook` (`gibbonHookID`, `name`, `type`, `options`, `gibbonModu
 INSERT INTO `gibbonHook` (`gibbonHookID`, `name`, `type`, `options`, `gibbonModuleID`) VALUES (NULL, 'House Points', 'Parental Dashboard', 'a:3:{s:16:\"sourceModuleName\";s:12:\"House Points\";s:18:\"sourceModuleAction\";s:19:\"View points overall\";s:19:\"sourceModuleInclude\";s:19:\"hook_housepoint.php\";}', (SELECT gibbonModuleID FROM gibbonModule WHERE name='House Points'));end
 " ;
 $count++;
+
+$sql[$count][0]="1.5.00" ; // version number
+$sql[$count][1]="" ;
+$count++;
