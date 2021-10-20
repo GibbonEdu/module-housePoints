@@ -8,7 +8,7 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
 
 } else {
 */
-    $yearID = $_SESSION[$guid]['gibbonSchoolYearID'];
+    $yearID = $session->get('gibbonSchoolYearID');
     $pointsList = readPointsList($connection2, $yearID);
     
     $hook = "";
@@ -25,7 +25,7 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
             $hook .= "<tr>";
                 $hook .= "<td class='textCenter'>";
                 if (!empty($row['houseLogo'])) {
-                    $hook .= sprintf('<img src="%1$s" title="%2$s" style="width:auto;height:80px;">', $_SESSION[$guid]['absoluteURL'].'/'.$row['houseLogo'], $row['houseName'] );
+                    $hook .= sprintf('<img src="%1$s" title="%2$s" style="width:auto;height:80px;">', $session->get('absoluteURL').'/'.$row['houseLogo'], $row['houseName'] );
                 }
                 $hook .= "</td>";
                 $hook .= "<td>".$row['houseName']."</td>";

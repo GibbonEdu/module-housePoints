@@ -7,7 +7,7 @@ $houseID = $_POST['houseID'];
 
 $data = array(
     'houseID' => $houseID,
-    'yearID' => $_SESSION[$guid]['gibbonSchoolYearID']
+    'yearID' => $session->get('gibbonSchoolYearID');
 );
 $sql = "SELECT hpPointHouse.hpID, 
     DATE_FORMAT(hpPointHouse.awardedDate, '%d/%m/%Y') AS awardedDate,
