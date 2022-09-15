@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+## v1.5.01
+Fixed parent dashboard issue for multiple-child families
+
 ## v1.5.00
 Ongoing refactoring
 
