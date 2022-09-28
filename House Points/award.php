@@ -43,7 +43,7 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/award.php")==F
         $unlimitedPoints = ($highestAction == 'Award house points_unlimited');
         
         $housePointCategoryGateway = $container->get(HousePointCategoryGateway::class);
-        $hpCategories = $housePointCategoryGateway->selectBy(['categoryType' => 'House']);
+        $hpCategories = $housePointCategoryGateway->selectBy(['categoryType' => 'Student']);
         $categories = array_reduce($hpCategories->fetchAll(), function($group, $item) use ($unlimitedPoints) { 
             if (empty($item['categoryPresets']) && !$unlimitedPoints) return $group; 
 

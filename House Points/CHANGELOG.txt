@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+## v1.5.02
+Fixed student categories not available when awarding points
+
 ## v1.5.01
 Fixed parent dashboard issue for multiple-child families
 
