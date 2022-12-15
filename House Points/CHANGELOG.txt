@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+## v1.5.03
+Fixed left students appearing in student point lists
+
 ## v1.5.02
 Fixed student categories not available when awarding points
 
