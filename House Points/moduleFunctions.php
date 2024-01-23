@@ -77,5 +77,68 @@ function readPointsList($dbh, $yearID) {
     return $rs;
 }
 
+// Queries for list of points awarded for students and houses.
+function readEventsList($dbh, $yearID) {
+    $data = array(
+        'yearID' => $yearID
+    );
+    $sql = "SELECT gibbonHouse.gibbonHouseID AS houseID,
+    gibbonHouse.name AS houseName,
+    gibbonHouse.logo AS houseLogo,
+    pointOverall.individualPoints AS individualPoints,
+	pointOverall.reason AS reason,
+    pointOverall.awardedDate AS awardedDate
+    FROM gibbonHouse
+    LEFT JOIN
+    (
+        SELECT gibbonPerson.gibbonHouseID AS houseID,
+        hpPointStudent.points AS individualPoints,
+        hpPointStudent.reason AS reason,
+        hpPointStudent.awardedDate AS awardedDate
+        FROM hpPointStudent
+        INNER JOIN gibbonPerson
+        ON hpPointStudent.studentID = gibbonPerson.gibbonPersonID
+        WHERE hpPointStudent.yearID=:yearID
+        UNION
+        SELECT hpPointHouse.houseID,
+        hpPointHouse.points AS individualPoints,
+        hpPointHouse.reason AS reason,
+        hpPointHouse.awardedDate AS awardedDate
+        FROM hpPointHouse
+        WHERE hpPointHouse.yearID=:yearID
+
+    ) AS pointOverall
+    ON pointOverall.houseID = gibbonHouse.gibbonHouseID
+    ORDER BY awardedDate";
+    $rs = $dbh->prepare($sql);
+    $rs->execute($data);
+    return $rs;
+}
+
+// Pivots the table returned in readEventsList() to have houses as columns and an event associated to them.
+function parseEventsList($rs) {
+    $oldTable = $rs->fetchAll();
+    $uniqueHouses = array_unique(array_column($oldTable, 'houseName'));
+    $sortValues = array_column($oldTable, 'reason'); 
+    array_multisort($sortValues, SORT_ASC, $oldTable);
+    $newTable = [];
+
+    foreach ($oldTable as $row) {
+        if(!empty($newTable[$row['reason']][$row['houseName']])) {
+            $newTable[$row['reason']][$row['houseName']] += $row['individualPoints'];
+        } else {
+            $newTable[$row['reason']][$row['houseName']] = $row['individualPoints'];
+        }
+        $newTable[$row['reason']]['awardedDate'] = $row['reason'];
+        $newTable[$row['reason']]['reason'] = $row['reason'];
+    }
+
+    $sortValues = array_column($newTable, 'awardedDate'); 
+    array_multisort($sortValues, SORT_DESC, $newTable);
+
+    return ['events' => $newTable, 'houses' => $uniqueHouses];
+    
+}
+
 
 ?>
