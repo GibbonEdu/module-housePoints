@@ -30,8 +30,8 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
 
     $totalsTable->addColumn('Crest')
         ->format(function ($row) {
-            $class = !empty($row['houseLogo'])? '' : '';
-            return Format::photo($row['houseLogo'], 'sm', $class);
+            $class = '';
+            return Format::photo($row['houseLogo'], 'md', $class);
     });
     $totalsTable->addColumn('House')
         ->setClass('text-lg text-gray-600 leading-snug')

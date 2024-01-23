@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+## v1.5.04
+Overhauled main point totals table in home page and added a points by event table.
+
 ## v1.5.03
 Fixed left students appearing in student point lists
 
