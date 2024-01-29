@@ -3,9 +3,12 @@
 //Module includes
 require_once './modules/House Points/moduleFunctions.php';
 
+use Gibbon\Module\HousePoints\Domain\HousePointHouseGateway;
 use Gibbon\Services\Format;
 use Gibbon\Tables\DataTable;
 use Gibbon\Tables\View\GridView;
+
+
 
 /*
 if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php') == false) {
@@ -16,11 +19,14 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
 
 } else {
 */
+    require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointHouseGateway.php';
     global $container;
+
     $yearID = $session->get('gibbonSchoolYearID');
-    
+    $housePointHouseGateway = $container->get(HousePointHouseGateway::class);
     // POINT TOTALS DATATABLE
-    $pointsList = readPointsList($connection2, $yearID);
+    $pointsList = $housePointHouseGateway->selectAllPoints($yearID);
+    
 
     $gridRenderer = new GridView($container->get('twig'));
     $totalsTable = $container->get(DataTable::class)->setRenderer($gridRenderer);
@@ -47,7 +53,7 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
     $hook = $totalsTable->render($pointsList->toDataSet());
 
     // EVENT POINTS DATATABLE
-    $eventPointsList = readEventsList($connection2, $yearID);
+    $eventPointsList = $housePointHouseGateway->selectEventsList($yearID);
     $eventPointsList = parseEventsList($eventPointsList);
 
     $eventsTable = $container->get(DataTable::class);
