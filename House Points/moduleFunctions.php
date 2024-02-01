@@ -54,6 +54,8 @@ function parseEventsList($rs) {
     $newTable = [];
 
     foreach ($oldTable as $row) {
+        if (empty($row['reason'])) continue;
+
         if(!empty($newTable[$row['reason']][$row['houseName']])) {
             $newTable[$row['reason']][$row['houseName']] += $row['individualPoints'];
         } else {
@@ -69,6 +71,3 @@ function parseEventsList($rs) {
     return ['events' => $newTable, 'houses' => $uniqueHouses];
     
 }
-
-
-?>

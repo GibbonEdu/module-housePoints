@@ -42,12 +42,12 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
     $totalsTable->addColumn('House')
         ->setClass('text-lg text-gray-600 leading-snug')
         ->format(function ($row) {
-            return !empty($row['houseName']) ? $row['houseName'] : ('House Name NA');
+            return !empty($row['houseName']) ? $row['houseName'] : __('Unknown');
     });
     $totalsTable->addColumn('Total')
         ->setClass('text-base text-gray-600 leading-snug')
         ->format(function ($row) {
-            return !empty($row['total']) ? $row['total'] : ('Point Total NA');
+            return !empty($row['total']) ? $row['total'] : '0';
     });
 
     $hook = $totalsTable->render($pointsList->toDataSet());

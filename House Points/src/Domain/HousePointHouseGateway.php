@@ -89,7 +89,7 @@ class HousePointHouseGateway extends QueryableGateway
             INNER JOIN gibbonPerson
             ON hpPointStudent.studentID = gibbonPerson.gibbonPersonID
             WHERE hpPointStudent.yearID=:yearID
-            UNION
+            UNION ALL
             SELECT hpPointHouse.houseID,
             hpPointHouse.points AS individualPoints,
             hpPointHouse.reason AS reason,
