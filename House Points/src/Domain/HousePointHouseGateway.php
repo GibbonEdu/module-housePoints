@@ -47,7 +47,7 @@ class HousePointHouseGateway extends QueryableGateway
                 'pointHouse.houseID = gibbonHouse.gibbonHouseID'
             )
             ->bindValue('yearID', $yearID)
-            ->orderBy(['total']);
+            ->orderBy(['total DESC']);
 
         return $this->runSelect($select);
     }
@@ -66,6 +66,42 @@ class HousePointHouseGateway extends QueryableGateway
             ->orderBy(['hpPointHouse.awardedDate']);
 
         return $this->runSelect($select);
+    }
+
+    function selectEventsList($yearID) {
+        $data = array(
+            'yearID' => $yearID
+        );
+        $sql = "SELECT gibbonHouse.gibbonHouseID AS houseID,
+        gibbonHouse.name AS houseName,
+        gibbonHouse.logo AS houseLogo,
+        pointOverall.individualPoints AS individualPoints,
+        pointOverall.reason AS reason,
+        pointOverall.awardedDate AS awardedDate
+        FROM gibbonHouse
+        LEFT JOIN
+        (
+            SELECT gibbonPerson.gibbonHouseID AS houseID,
+            hpPointStudent.points AS individualPoints,
+            hpPointStudent.reason AS reason,
+            hpPointStudent.awardedDate AS awardedDate
+            FROM hpPointStudent
+            INNER JOIN gibbonPerson
+            ON hpPointStudent.studentID = gibbonPerson.gibbonPersonID
+            WHERE hpPointStudent.yearID=:yearID
+            UNION
+            SELECT hpPointHouse.houseID,
+            hpPointHouse.points AS individualPoints,
+            hpPointHouse.reason AS reason,
+            hpPointHouse.awardedDate AS awardedDate
+            FROM hpPointHouse
+            WHERE hpPointHouse.yearID=:yearID
+    
+        ) AS pointOverall
+        ON pointOverall.houseID = gibbonHouse.gibbonHouseID
+        ORDER BY awardedDate";
+        
+        return $this->db()->select($sql, $data);
     }
     
 }

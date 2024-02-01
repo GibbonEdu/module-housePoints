@@ -27,7 +27,6 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/house.php")==F
     //Acess denied
     $page->addError(__('You do not have access to this action.'));
 } else {
-
         $form = Form::create('awardForm', $session->get('absoluteURL') . '/modules/' . $session->get('module') . '/housePointsProcess.php', 'post');
         $form->setTitle('Award house points to house');
         $form->addHiddenValue('address', $session->get('address'));
@@ -59,11 +58,15 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/house.php")==F
             $row->addLabel('points', __('Points'));
             $row->addTextField('points')->disabled()->placeholder(__('Select a category'));
 
+        $reasons = $pdo->select("SELECT DISTINCT reason FROM hpPointHouse UNION SELECT DISTINCT reason from hpPointStudent ORDER BY reason")->fetchAll(\PDO::FETCH_COLUMN);
         $row = $form->addRow();
             $row->addLabel('reason', __('Reason'));
-            $row->addTextArea('reason')->setRows(2)->required();
-            
-         $row = $form->addRow();
+            $row->addTextField('reason')->maxLength(100)->required()->autocomplete($reasons);
+        
+        $row = $form->addRow();
+            $row->addAlert(__('If the reason for awarding points already exists, ensure the text in the reason field is the same.'), "warning");
+
+        $row = $form->addRow();
             $row->addFooter();
             $row->addSubmit();
 

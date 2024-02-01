@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+## v1.5.04
+Overhauled main point totals table in home page and added a points by event table
+Changed award house points and Award student points forms to emphasise identical 'reason' fields
+Added reason autocomplete dropdown for ease-of-use
+
 ## v1.5.03
 Fixed left students appearing in student point lists
 

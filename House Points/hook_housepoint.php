@@ -3,6 +3,13 @@
 //Module includes
 require_once './modules/House Points/moduleFunctions.php';
 
+use Gibbon\Module\HousePoints\Domain\HousePointHouseGateway;
+use Gibbon\Services\Format;
+use Gibbon\Tables\DataTable;
+use Gibbon\Tables\View\GridView;
+
+
+
 /*
 if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php') == false) {
     //Acess denied
@@ -12,30 +19,60 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
 
 } else {
 */
+    require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointHouseGateway.php';
+    global $container;
+
     $yearID = $session->get('gibbonSchoolYearID');
-    $pointsList = readPointsList($connection2, $yearID);
+    $housePointHouseGateway = $container->get(HousePointHouseGateway::class);
+    // POINT TOTALS DATATABLE
+    $pointsList = $housePointHouseGateway->selectAllPoints($yearID);
+    
 
-    $hook = "";
-    $hook .= "<p>&nbsp;</p>";
-    $hook .= "<h3>Overall House Points</h3>";
-    $hook .= "<table style='width:100%;font-size:14pt'>";
-        $hook .= "<tr>";
-            $hook .= "<th style='width:15%'>Crest</th>";
-            $hook .= "<th style='width:35%'>House</th>";
-            $hook .= "<th style='width:30%'>Points</th>";
-        $hook .= "</tr>";
+    $gridRenderer = new GridView($container->get('twig'));
+    $totalsTable = $container->get(DataTable::class)->setRenderer($gridRenderer);
+    $totalsTable->setTitle(__('Overall House Points'));
+    $totalsTable->addMetaData('hidePagination', true);
+    $totalsTable->addMetaData('gridItemClass', 'w-1/2 sm:w-1/4 md:w-1/3 my-2 text-center');
 
-        while ($row = $pointsList->fetch()) {
-            $hook .= "<tr>";
-                $hook .= "<td class='textCenter'>";
-                if (!empty($row['houseLogo'])) {
-                    $hook .= sprintf('<img src="%1$s" title="%2$s" style="width:auto;height:80px;">', $session->get('absoluteURL').'/'.$row['houseLogo'], $row['houseName'] );
-                }
-                $hook .= "</td>";
-                $hook .= "<td>".$row['houseName']."</td>";
-                $hook .= "<td>".$row['total']."</td>";
-            $hook .= "</tr>";
-        }
-    $hook .= "</table>";
+    $totalsTable->addColumn('Crest')
+        ->format(function ($row) {
+            $class = '';
+            return Format::photo($row['houseLogo'], 'md', $class);
+    });
+    $totalsTable->addColumn('House')
+        ->setClass('text-lg text-gray-600 leading-snug')
+        ->format(function ($row) {
+            return !empty($row['houseName']) ? $row['houseName'] : ('House Name NA');
+    });
+    $totalsTable->addColumn('Total')
+        ->setClass('text-base text-gray-600 leading-snug')
+        ->format(function ($row) {
+            return !empty($row['total']) ? $row['total'] : ('Point Total NA');
+    });
+
+    $hook = $totalsTable->render($pointsList->toDataSet());
+
+    // EVENT POINTS DATATABLE
+    $eventPointsList = $housePointHouseGateway->selectEventsList($yearID);
+    $eventPointsList = parseEventsList($eventPointsList);
+
+    $eventsTable = $container->get(DataTable::class);
+    $eventsTable->setTitle(__('House Points By Event'));
+    $eventsTable->addMetaData('hidePagination', true);
+    $eventsTable->addMetaData('gridItemClass', 'w-1/2 sm:w-1/4 md:w-1/5 my-2 text-center');
+    
+    $eventsTable->addColumn('reason', 'Event');
+    foreach($eventPointsList['houses'] as $house) {
+        $eventsTable->addColumn($house, $house);
+    }
+
+    // Re-format NULL cell values to '0'
+    foreach($eventPointsList['houses'] as $house) {
+        $eventsTable->getColumn($house)->format(function ($values) use ($house) { 
+            return !empty($values[$house]) ? $values[$house] : '0';
+        });
+    }
+
+    $hook .= $eventsTable->render($eventPointsList['events']);
     return $hook;
 //}
