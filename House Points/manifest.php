@@ -1,7 +1,9 @@
 <?php
 /*
-Gibbon, Flexible & Open School System
-Copyright (C) 2010, Ross Parker
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,14 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //Basica variables
-$name="House Points" ;
-$description="Module to allow allocating and display of house points (modified by Sandra https://github.com/SKuipers)" ;
-$entryURL="overall.php" ;
-$type="Additional" ;
-$category="Learn" ;
-$version="1.5.05" ;
-$author="Andy Statham" ;
-$url="http://rapid36.com" ;
+$name = "House Points" ;
+$description = "Module to allow allocating and display of house points." ;
+$entryURL = "overall.php" ;
+$type = "Additional" ;
+$category = "Learn" ;
+$version = "1.6.00" ;
+$author = "Gibbon Foundation";
+$url = "https://gibbonedu.org";
 
 //Module tables
 $moduleTables[0] = "

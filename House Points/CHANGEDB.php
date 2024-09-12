@@ -83,3 +83,10 @@ $count++;
 $sql[$count][0]="1.5.05" ; // version number
 $sql[$count][1]="" ;
 $count++;
+
+//v1.6.00
+++$count;
+$sql[$count][0] = '1.6.00';
+$sql[$count][1] = "
+UPDATE gibbonModule SET author='Gibbon Foundation', url='https://gibbonedu.org', description='Module to allow allocating and display of house points.' WHERE name='House Points';end
+";
