@@ -39,7 +39,6 @@ INSERT INTO `hpCategory` (`categoryID`, `categoryName`, `categoryOrder`, `catego
 " ;
 $count++;
 
-
 $sql[$count][0]="1.3.02" ; // version number
 $sql[$count][1]="" ;
 $count++;
@@ -90,3 +89,8 @@ $sql[$count][0] = '1.6.00';
 $sql[$count][1] = "
 UPDATE gibbonModule SET author='Gibbon Foundation', url='https://gibbonedu.org', description='Module to allow allocating and display of house points.' WHERE name='House Points';end
 ";
+
+//v1.6.01
+++$count;
+$sql[$count][0] = '1.6.01';
+$sql[$count][1] = "";
