@@ -26,8 +26,8 @@ use Gibbon\Tables\DataTable;
 
 require_once __DIR__ . '/moduleFunctions.php';
 
-$page->breadcrumbs->add(__('View points individual'));
-if (isActionAccessible($guid, $connection2,"/modules/House Points/individual.php")==FALSE) {
+$page->breadcrumbs->add(__('Manage Points'));
+if (isActionAccessible($guid, $connection2,"/modules/House Points/manage.php")==FALSE) {
     //Acess denied
    $page->addError(__('You do not have access to this action.'));
 } else {

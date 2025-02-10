@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+v1.7.00
+-------
+Gibbon v28 Compatibility
+Fixed permission check for accessing Manage Points
+
 v1.6.01
 -------
 Added license preamble to CSS file
