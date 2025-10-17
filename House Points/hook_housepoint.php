@@ -3,12 +3,11 @@
 //Module includes
 require_once './modules/House Points/moduleFunctions.php';
 
-use Gibbon\Module\HousePoints\Domain\HousePointHouseGateway;
+use Gibbon\Forms\Form;
 use Gibbon\Services\Format;
 use Gibbon\Tables\DataTable;
 use Gibbon\Tables\View\GridView;
-
-
+use Gibbon\Module\HousePoints\Domain\HousePointHouseGateway;
 
 /*
 if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php') == false) {
@@ -25,8 +24,7 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
     $yearID = $session->get('gibbonSchoolYearID');
     $housePointHouseGateway = $container->get(HousePointHouseGateway::class);
     // POINT TOTALS DATATABLE
-    $pointsList = $housePointHouseGateway->selectAllPoints($yearID);
-    
+    $pointsList = $housePointHouseGateway->selectAllPoints($yearID);  
 
     $gridRenderer = new GridView($container->get('twig'));
     $totalsTable = $container->get(DataTable::class)->setRenderer($gridRenderer);
@@ -51,7 +49,7 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
     });
 
     $hook = $totalsTable->render($pointsList->toDataSet());
-
+    
     // EVENT POINTS DATATABLE
     $eventPointsList = $housePointHouseGateway->selectEventsList($yearID);
     $eventPointsList = parseEventsList($eventPointsList);
@@ -74,5 +72,36 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
     }
 
     $hook .= $eventsTable->render($eventPointsList['events']);
+
+    // HALL OF FAME DATATABLE
+    $form = Form::create('title', '');
+    $form->setTitle(__('Hall of Fame'));
+    $form->setClass('noIntBorder w-full');
+    $hook .= $form->getOutput();
+    
+    // Get all Relevant School Year
+    $houseSchoolYears = $housePointHouseGateway->selectHouseSchoolYears()->fetchAll();
+
+    // Create a table for each school year
+    foreach ($houseSchoolYears as $schoolYear) {
+        $totalPointsList = $housePointHouseGateway->selectAllPoints($schoolYear['gibbonSchoolYearID']);
+
+        $HOFtable = DataTable::create('housePoints');
+        $HOFtable->setTitle($schoolYear['name']);
+        $HOFtable->addMetaData('hidePagination', true);
+        $HOFtable->addMetaData('gridItemClass', 'w-1/2 sm:w-1/4 md:w-1/3 my-2 text-center');
+
+        $HOFtable->addColumn('houseName', __('House'));
+        $HOFtable->addColumn('houseLogo', __('House Logo'))
+                ->format(function ($row) {
+                    $class = 'w-8 ';
+                    return Format::photo($row['houseLogo'], '', $class);
+                });
+        $HOFtable->addColumn('total', __('Total Points'));
+
+        $hook .= $HOFtable->render($totalPointsList->toDataSet());
+    }
+
     return $hook;
+
 //}
