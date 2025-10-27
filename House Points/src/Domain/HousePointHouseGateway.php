@@ -104,5 +104,16 @@ class HousePointHouseGateway extends QueryableGateway
         
         return $this->db()->select($sql, $data);
     }
-    
+
+   function selectHouseSchoolYears() {
+        $sql = "SELECT DISTINCT gibbonSchoolYear.gibbonSchoolYearID, gibbonSchoolYear.name, gibbonSchoolYear.sequenceNumber
+                FROM gibbonSchoolYear
+                JOIN ((SELECT hpPointHouse.yearID FROM hpPointHouse)
+                UNION 
+                (SELECT hpPointStudent.yearID FROM hpPointStudent)) AS houseYears ON houseYears.yearID = gibbonSchoolYear.gibbonSchoolYearID
+                WHERE gibbonSchoolYear.status <> 'Current'
+                ORDER BY gibbonSchoolYear.sequenceNumber DESC;";
+        
+        return $this->db()->select($sql);
+    }
 }

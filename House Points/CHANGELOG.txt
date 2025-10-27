@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v1.7.01
+-------
+Added a Hall of Fame to display the House Points from previous years on the dashboard
+
 v1.7.00
 -------
 Gibbon v28 Compatibility
