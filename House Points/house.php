@@ -109,7 +109,7 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/house.php")==F
 
             $('#awardForm').change(function() {
                 $('#msg').html('');
-                $('#submit').prop('disabled', false).css({'background-color': 'black', 'color': 'white'});
+                $('#submit').prop('disabled', false);
             });
         </script>
         <?php
