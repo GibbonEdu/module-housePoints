@@ -25,7 +25,7 @@ $description = "Module to allow allocating and display of house points." ;
 $entryURL = "overall.php" ;
 $type = "Additional" ;
 $category = "Learn" ;
-$version = "1.7.01" ;
+$version = "1.7.02" ;
 $author = "Gibbon Foundation";
 $url = "https://gibbonedu.org";
 

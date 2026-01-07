@@ -27,17 +27,17 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
     die(__('Your request failed because you do not have access to this action.'));
 } else {
     $URL = $session->get('absoluteURL') . '/index.php?q=/modules/' . $session->get('module') . '/award.php';
+    $housePointStudentGateway = $container->get(HousePointStudentGateway::class);
     
-    $studentID = $_POST['studentID'] ?? null;
+    $students = $_POST['students'] ?? [];
     $categoryID = $_POST['categoryID'] ?? null;
     $points = $_POST['points'] ?? null;
     $reason = $_POST['reason'] ?? null;
     $yearID = $_POST['yearID'] ?? null;
     $teacherID = $_POST['teacherID'] ?? null;
 
-    if (($studentID || $categoryID || $points || $reason || $yearID || $teacherID) != NULL) {
+    if (($students || $categoryID || $points || $reason || $yearID || $teacherID) != NULL) {
         $data = [
-        'studentID' => $studentID,
         'categoryID' => $categoryID,
         'points' => $points,
         'reason' => $reason,
@@ -45,27 +45,25 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
         'awardedDate' => date('Y-m-d'),
         'awardedBy' => $teacherID
         ];
-        
-        $housePointStudentGateway = $container->get(HousePointStudentGateway::class);
-        $housePointStudentID = $housePointStudentGateway->insert($data);
-        if ($housePointStudentID === false) {
-            $URL .= '&return=error2';
-            header("Location: {$URL}");
-            exit();
-        }
-        //Success 0
+
+        foreach ($students as $studentID) {
+            $data['studentID'] = $studentID;
+            $housePointStudentID = $housePointStudentGateway->insert($data);
+
+            if ($housePointStudentID === false) {
+                $URL .= '&return=error2';
+                header("Location: {$URL}");
+                exit();
+            }
+        }       
+        // Success 0
         $URL .= '&return=success0';
         header("Location: {$URL}");
         exit();
-    
     } else {
         $URL .= '&return=error2';
-            header("Location: {$URL}");
-            exit();
+        header("Location: {$URL}");
+        exit();
     }
-    
-    
-  
 }
-
 ?>

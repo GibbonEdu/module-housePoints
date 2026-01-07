@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+
+v1.7.02
+-------
+Added the option to award points to multiple students
+
 v1.7.01
 -------
 Added a Hall of Fame to display the House Points from previous years on the dashboard
