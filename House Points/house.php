@@ -62,11 +62,11 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/house.php")==F
 
         $reasons = $pdo->select("SELECT DISTINCT reason FROM hpPointHouse UNION SELECT DISTINCT reason from hpPointStudent ORDER BY reason")->fetchAll(\PDO::FETCH_COLUMN);
         $row = $form->addRow();
-            $row->addLabel('reason', __('Reason'));
+            $row->addLabel('reason', __('Activity'));
             $row->addTextField('reason')->maxLength(100)->required()->autocomplete($reasons);
         
         $row = $form->addRow();
-            $row->addAlert(__('If the reason for awarding points already exists, ensure the text in the reason field is the same.'), "warning");
+            $row->addAlert(__('If the activity name for awarding points already exists, ensure the text in the activity field is the same.'), "warning");
 
         $row = $form->addRow();
             $row->addFooter();

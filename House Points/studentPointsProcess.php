@@ -42,7 +42,7 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
         'points' => $points,
         'reason' => $reason,
         'yearID' => $yearID,
-        'awardedDate' => date('Y-m-d'),
+        'awardedDate' => date('Y-m-d H:i:s'),
         'awardedBy' => $teacherID
         ];
 
