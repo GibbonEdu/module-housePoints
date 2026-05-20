@@ -34,8 +34,7 @@ use Gibbon\Module\HousePoints\Domain\HousePointCategoryGateway;
 /**
  * View Points
  *
- * A view composer for the house points dashboard sections.
- * Each public method renders one section and returns its HTML output.
+ * A view composer for the viewing House Points
  *
  * @version v31
  * @since   v31
@@ -61,7 +60,7 @@ class viewPoints implements ContainerAwareInterface
     /**
      * Section 1: Overall house point totals for the current school year.
      */
-    public function renderOverallPoints()
+    public function renderOverallPoints($linkToEvents = false)
     {
         $yearID = $this->session->get('gibbonSchoolYearID');
         $pointsList = $this->housePointHouseGateway->selectAllPoints($yearID);
@@ -69,8 +68,14 @@ class viewPoints implements ContainerAwareInterface
         $gridRenderer = new GridView($this->getContainer()->get('twig'));
         $table = DataTable::create('hpOverall', $gridRenderer);
         $table->setTitle(__('Overall House Points'));
-        $table->addMetaData('hidePagination', true);
+        $table->addMetaData('hidePagination', !$linkToEvents);
         $table->addMetaData('gridItemClass', 'w-1/2 sm:w-1/4 md:w-1/3 my-2 text-center');
+
+        if ($linkToEvents) {
+            $table->addHeaderAction('view', __('House Points By Events'))
+                ->displayLabel()
+                ->setURL('/modules/House Points/overall.php');
+        }
 
         $table->addColumn('Crest')
             ->format(function ($row) {
@@ -91,61 +96,57 @@ class viewPoints implements ContainerAwareInterface
     }
 
     /**
-     * Section 2: Events grouped by category
+     * Section 2: Table of house/student points filtered by event
      */
-    public function renderByCategory()
+    public function renderByEvents()
     {
-        $yearID = $this->session->get('gibbonSchoolYearID');
+        $yearID        = $this->session->get('gibbonSchoolYearID');
+        $absoluteURL   = $this->session->get('absoluteURL');
+        $selectedEvent = trim($_GET['hpEvent'] ?? '');
 
-        $categories = $this->housePointCategoryGateway->selectBy([], ['categoryID', 'categoryName'])->fetchAll();
-        $categoryOptions = array_column($categories, 'categoryName', 'categoryID');
+        // Distinct event names for the dropdown.
+        $distinctEvents = $this->housePointCategoryGateway->selectDistinctCategoryEvents()->fetchAll();
+        $eventOptions   = array_map('trim', array_column($distinctEvents, 'categoryEvent'));
 
-        $titleForm = Form::create('hpCategoryTitle', '');
-        $titleForm->setTitle(__('House Points By Category'));
-        $titleForm->setClass('noIntBorder w-full');
-        $output = $titleForm->getOutput();
+        $form = Form::create('hpEventSelectorForm', $absoluteURL . '/index.php', 'get');
+        $form->setTitle(__('House Points By Events'));
+        $form->setClass('noIntBorder w-full');
+        $form->addHiddenValue('q', '/modules/House Points/overall.php');
 
-        $output .= '<div x-data="{ hpCategory: \'\' }">';
+        $row = $form->addRow();
+            $row->addLabel('hpEvent', __('Event'));
+            $row->addSelect('hpEvent')
+                ->fromArray($eventOptions)
+                ->selected($selectedEvent)
+                ->required()
+                ->placeholder();
 
-        // action='ajax' skips the <form> tag, so no nested x-data conflict
-        $selectorForm = Form::createBlank('hpCategorySelector', 'ajax');
-        $row = $selectorForm->addRow();
-        $row->addLabel('hpCategorySelect', __('Category'));
-        $row->addSelect('hpCategorySelect')->addClass('bg-blue-50')
-            ->fromArray($categoryOptions)
-            ->placeholder(__('-- Select a Category --'))
-            ->setAttribute('x-model', 'hpCategory');
-        $output .= $selectorForm->getOutput();
+        $row = $form->addRow();
+            $row->addFooter();
+            $row->addSearchSubmit($this->session);
 
-        foreach ($categories as $cat) {
-            $catID = (int) $cat['categoryID'];
+        $output = $form->getOutput();
 
-            // Per-category criteria — reads sort state from POST on AJAX refresh
+        if (!empty($selectedEvent) && in_array($selectedEvent, $eventOptions)) {
             $criteria = $this->housePointHouseGateway
-                ->newQueryCriteria(true)
+                ->newQueryCriteria()
                 ->sortBy('awardedDate', 'DESC')
-                ->fromPOST('hpEvents' . $catID);
+                ->pageSize(50)
+                ->fromPOST('hpCategoryEvents');
 
-            $events = $this->housePointHouseGateway->queryEventsByCategory($criteria, $yearID, $catID);
+            $events = $this->housePointHouseGateway
+                ->queryEventsByCategoryEvent($criteria, $yearID, $selectedEvent);
 
-            $output .= '<div x-show="hpCategory == \'' . $catID . '\'" x-cloak class="mt-4">';
+            $table = DataTable::createPaginated('hpCategoryEvents', $criteria);
+            $table->setTitle($selectedEvent);
 
-            $eventsTable = DataTable::createPaginated('hpEvents' . $catID, $criteria);
-            $eventsTable->addMetaData('hidePagination', true);
+            $table->addColumn('reason', __('Activity'));
+            $table->addColumn('points', __('Points'))->notSortable();
+            $table->addColumn('houseName', __('House'));
+            $table->addColumn('studentName', __('Student'));
 
-            $eventsTable->addColumn('reason', __('Activity'))->sortable(['reason']);
-            $eventsTable->addColumn('houseName', __('House'))->sortable(['houseName']);
-            $eventsTable->addColumn('points', __('Points'))->notSortable();
-            $eventsTable->addColumn('studentName', __('Student'))
-                ->format(function ($row) {
-                    return $row['studentName'] ?? '';
-                });
-
-            $output .= $eventsTable->render($events);
-            $output .= '</div>';
+            $output .= $table->render($events);
         }
-
-        $output .= '</div>';
 
         return $output;
     }
@@ -165,7 +166,6 @@ class viewPoints implements ContainerAwareInterface
             $table = DataTable::create('housePoints' . $schoolYear['gibbonSchoolYearID']);
             $table->setTitle($schoolYear['name']);
             $table->addMetaData('hidePagination', true);
-            $table->addMetaData('gridItemClass', 'w-1/2 sm:w-1/4 md:w-1/3 my-2 text-center');
 
             $table->addColumn('houseName', __('House'));
             $table->addColumn('houseLogo', __('House Logo'))

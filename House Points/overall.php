@@ -34,7 +34,7 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
     echo $view->renderOverallPoints();
 
     // EVENT POINTS DATATABLE
-    echo $view->renderByCategory();
+    echo $view->renderByEvents();
 
     // HALL OF FAME DATATABLE
     echo $view->renderHallOfFame();

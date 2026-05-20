@@ -21,30 +21,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use Gibbon\Module\HousePoints\viewPoints;
 
-// if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php') == false) {
-//     // Access denied
-//     echo "<div class='error'>";
-//     echo 'You do not have access to this action.';
-//     echo '</div>';
+require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointHouseGateway.php';
+require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointCategoryGateway.php';
+require_once $session->get('absolutePath').'/modules/House Points/src/viewPoints.php';
+global $container;
 
-// } else {
+$view = $container->get(viewPoints::class);
 
-    require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointHouseGateway.php';
-    require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointCategoryGateway.php';
-    require_once $session->get('absolutePath').'/modules/House Points/src/viewPoints.php';
-    global $container;
+$hook  = $view->renderOverallPoints(true);
 
-    $view = $container->get(viewPoints::class);
+// HALL OF FAME DATATABLE
+$hook .= $view->renderHallOfFame();
 
-    // POINT TOTALS DATATABLE
-    $hook  = $view->renderOverallPoints();
-
-    // EVENT POINTS DATATABLE
-    $hook .= $view->renderByCategory();
-
-    // HALL OF FAME DATATABLE
-    $hook .= $view->renderHallOfFame();
-
-    return $hook;
-
-// }
+return $hook;

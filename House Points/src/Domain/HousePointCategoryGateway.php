@@ -19,7 +19,16 @@ class HousePointCategoryGateway extends QueryableGateway
     private static $primaryKey = 'categoryID';
     private static $searchableColumns = [];
 
-    
+    public function selectDistinctCategoryEvents()
+    {
+        $query = $this
+            ->newSelect()
+            ->from($this->getTableName())
+            ->cols(['categoryEvent'])
+            ->where("categoryEvent != ''")
+            ->groupBy(['categoryEvent'])
+            ->orderBy(['categoryEvent']);
 
-    
+        return $this->runSelect($query);
+    }    
 }

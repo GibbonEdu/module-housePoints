@@ -19,30 +19,39 @@ class HousePointHouseGateway extends QueryableGateway
     private static $primaryKey = 'hpID';
     private static $searchableColumns = [];
 
-    public function queryEventsByCategory(QueryCriteria $criteria, $yearID, $catID)
+    /**
+     * Returns a paginated DataSet of all student and house point records whose
+     * category belongs to the given event name, for the given school year.
+     *
+     * @param  QueryCriteria $criteria
+     * @param  string|int    $yearID
+     * @param  string        $categoryEvent  Trimmed event name from hpCategory.categoryEvent
+     * @return \Gibbon\Domain\DataSet
+     */
+    public function queryEventsByCategoryEvent(QueryCriteria $criteria, $yearID, $categoryEvent)
     {
         $query = $this
             ->newQuery()
             ->cols([
-                'hpPointStudent.categoryID',
-                'gibbonHouse.name AS houseName',
+                'hpCategory.categoryName AS categoryName',
+                "COALESCE(gibbonHouse.name, '') AS houseName",
                 'hpPointStudent.points AS points',
                 'hpPointStudent.reason AS reason',
                 'hpPointStudent.awardedDate AS awardedDate',
                 "CONCAT(gibbonPerson.preferredName, ' ', gibbonPerson.surname) AS studentName",
             ])
             ->from('hpPointStudent')
-            ->innerJoin('gibbonPerson', 'hpPointStudent.studentID = gibbonPerson.gibbonPersonID')
-            ->innerJoin('gibbonHouse', 'gibbonPerson.gibbonHouseID = gibbonHouse.gibbonHouseID')
+            ->innerJoin('hpCategory',  'hpPointStudent.categoryID  = hpCategory.categoryID')
+            ->innerJoin('gibbonPerson', 'hpPointStudent.studentID   = gibbonPerson.gibbonPersonID')
+            ->leftJoin('gibbonHouse',  'gibbonPerson.gibbonHouseID = gibbonHouse.gibbonHouseID')
             ->where('hpPointStudent.yearID = :yearID')
             ->bindValue('yearID', $yearID)
-            ->where("hpPointStudent.reason != ''")
-            ->where('hpPointStudent.categoryID = :catID')
-            ->bindValue('catID', $catID);
+            ->where('TRIM(hpCategory.categoryEvent) = :categoryEvent')
+            ->bindValue('categoryEvent', trim($categoryEvent));
 
         $this->unionAllWithCriteria($query, $criteria)
             ->cols([
-                'hpPointHouse.categoryID',
+                'hpCategory.categoryName AS categoryName',
                 'gibbonHouse.name AS houseName',
                 'hpPointHouse.points AS points',
                 'hpPointHouse.reason AS reason',
@@ -50,13 +59,12 @@ class HousePointHouseGateway extends QueryableGateway
                 'NULL AS studentName',
             ])
             ->from('hpPointHouse')
-            ->innerJoin('gibbonHouse', 'hpPointHouse.houseID = gibbonHouse.gibbonHouseID')
+            ->innerJoin('hpCategory', 'hpPointHouse.categoryID = hpCategory.categoryID')
+            ->innerJoin('gibbonHouse', 'hpPointHouse.houseID   = gibbonHouse.gibbonHouseID')
             ->where('hpPointHouse.yearID = :yearID')
             ->bindValue('yearID', $yearID)
-            ->where('hpPointHouse.reason IS NOT NULL')
-            ->where("hpPointHouse.reason != ''")
-            ->where('hpPointHouse.categoryID = :catID')
-            ->bindValue('catID', $catID);
+            ->where('TRIM(hpCategory.categoryEvent) = :categoryEvent')
+            ->bindValue('categoryEvent', trim($categoryEvent));
 
         return $this->runQuery($query, $criteria);
     }
@@ -110,7 +118,7 @@ class HousePointHouseGateway extends QueryableGateway
         return $this->runSelect($select);
     }
 
-   function selectHouseSchoolYears() {
+    public function selectHouseSchoolYears() {
         $sql = "SELECT DISTINCT gibbonSchoolYear.gibbonSchoolYearID, gibbonSchoolYear.name, gibbonSchoolYear.sequenceNumber
                 FROM gibbonSchoolYear
                 JOIN ((SELECT hpPointHouse.yearID FROM hpPointHouse)
