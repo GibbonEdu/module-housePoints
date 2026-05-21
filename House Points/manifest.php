@@ -25,7 +25,7 @@ $description = "Module to allow allocating and display of house points." ;
 $entryURL = "overall.php" ;
 $type = "Additional" ;
 $category = "Learn" ;
-$version = "1.7.02" ;
+$version = "1.7.03" ;
 $author = "Gibbon Foundation";
 $url = "https://gibbonedu.org";
 
@@ -34,6 +34,7 @@ $moduleTables[0] = "
     CREATE TABLE hpCategory (
     categoryID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     categoryName VARCHAR(45) NOT NULL,
+    categoryEvent VARCHAR(90) NOT NULL,
     categoryOrder TINYINT(4) UNSIGNED NOT NULL,
     categoryType ENUM('House','Student') NOT NULL DEFAULT 'House',
     categoryPresets TEXT NOT NULL,
@@ -46,7 +47,7 @@ $moduleTables[1] = "
     studentID int(10) unsigned NOT NULL,
     categoryID int(10) unsigned NOT NULL,
     points INT(4) unsigned NOT NULL,
-    reason varchar(255) NOT NULL,
+    activity varchar(255) NOT NULL,
     yearID int(10) unsigned NOT NULL,
     awardedDate datetime NOT NULL,
     awardedBy int(10) unsigned NOT NULL,
@@ -59,7 +60,7 @@ $moduleTables[2] = "
     houseID INT(10) UNSIGNED NOT NULL,
     categoryID INT(10) UNSIGNED NOT NULL,
     points INT(4) UNSIGNED NOT NULL,
-    reason VARCHAR(255) NULL,
+    activity VARCHAR(255) NULL,
     yearID INT(10) UNSIGNED NOT NULL,
     awardedDate DATETIME NOT NULL,
     awardedBy INT(10) UNSIGNED NOT NULL,

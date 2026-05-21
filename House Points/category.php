@@ -38,6 +38,7 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/category.php")
             ->displayLabel();
     
     $table->addColumn('categoryName', __('Name'));
+    $table->addColumn('categoryEvent', __('Event'));
     
     $table->addActionColumn()
         ->addParam('categoryID')

@@ -42,6 +42,10 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/category.php")
             $row->addTextField('categoryName')->required()->maxLength(45)->setValue($category['categoryName']);
 
         $row = $form->addRow();
+            $row->addLabel('categoryEvent', __('Event'));
+            $row->addTextField('categoryEvent')->required()->maxLength(90)->setValue($category['categoryEvent']);
+
+        $row = $form->addRow();
             $row->addLabel('categoryType', __('Type'));
             $row->addSelect('categoryType')->fromArray(array('House', 'Student'))->selected($category['categoryType']);
 

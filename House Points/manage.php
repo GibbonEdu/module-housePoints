@@ -73,7 +73,7 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/manage.php")==
         $table->addColumn('awardedDate', __('Date'));
         $table->addColumn('points', __('Points'));
         $table->addColumn('categoryName', __('Category'));
-        $table->addColumn('reason', __('Reason'));
+        $table->addColumn('activity', __('Activity'));
         $table->addColumn('teacherName', __('Awarded By'));
         $table->addActionColumn()
         ->addParam('hpID')
@@ -95,7 +95,7 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/manage.php")==
         $table->addColumn('awardedDate', __('Date'));
         $table->addColumn('points', __('Points'));
         $table->addColumn('categoryName', __('Category'));
-        $table->addColumn('reason', __('Reason'));
+        $table->addColumn('activity', __('Activity'));
         $table->addColumn('teacherName', __('Awarded By'));
         $table->addActionColumn()
         ->addParam('hpID')

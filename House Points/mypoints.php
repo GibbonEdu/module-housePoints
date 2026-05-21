@@ -25,7 +25,7 @@ require_once __DIR__ . '/moduleFunctions.php';
 
 $page->breadcrumbs->add(__('View points overall'));
 if (isActionAccessible($guid, $connection2,"/modules/House Points/overall.php")==FALSE) {
-    //Acess denied
+    // Access denied
     $page->addError(__('You do not have access to this action.'));
 } else {
     $housePointStudentGateway = $container->get(HousePointStudentGateway::class);
@@ -39,7 +39,7 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/overall.php")=
     $table->addColumn('awardedDate', __('Date'));
     $table->addColumn('points', __('Points'));
     $table->addColumn('categoryName', __('Category'));
-    $table->addColumn('reason', __('Reason'));
+    $table->addColumn('activity', __('Activity'));
     $table->addColumn('teacherName', __('Awarded By'));
     
     echo $table->render($housePoints);

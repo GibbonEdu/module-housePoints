@@ -23,7 +23,7 @@ class HousePointStudentGateway extends QueryableGateway
         $select = $this
             ->newSelect()
             ->from('hpPointStudent')
-            ->cols(['hpPointStudent.hpID','DATE_FORMAT(hpPointStudent.awardedDate, \'%d/%m/%Y\') AS awardedDate','hpPointStudent.points','hpCategory.categoryName','hpPointStudent.reason','CONCAT(gibbonPerson.title, \' \', gibbonPerson.preferredName, \' \', gibbonPerson.surname) AS teacherName'])
+            ->cols(['hpPointStudent.hpID','DATE_FORMAT(hpPointStudent.awardedDate, \'%d/%m/%Y\') AS awardedDate','hpPointStudent.points','hpCategory.categoryName', 'hpCategory.categoryEvent', 'hpPointStudent.activity','CONCAT(gibbonPerson.title, \' \', gibbonPerson.preferredName, \' \', gibbonPerson.surname) AS teacherName'])
             ->innerJoin('hpCategory', 'hpCategory.categoryID=hpPointStudent.categoryID')
             ->innerJoin('gibbonPerson', 'gibbonPerson.gibbonPersonID=hpPointStudent.awardedBy')
             ->where('hpPointStudent.studentID = :studentID')

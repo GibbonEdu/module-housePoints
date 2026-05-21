@@ -29,6 +29,7 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
     $URL = $session->get('absoluteURL') . '/index.php?q=/modules/' . $session->get('module') . '/category.php';
     
     $categoryName = $_POST['categoryName'] ?? null;
+    $categoryEvent = $_POST['categoryEvent'] ?? null;
     $categoryType = $_POST['categoryType'] ?? 'House';
     $categoryPresets = $_POST['categoryPresets'] ?? null;
 
@@ -37,6 +38,7 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
         
         $data = [
             'categoryName' => $categoryName,
+            'categoryEvent' => $categoryEvent,
             'categoryType' => $categoryType,
             'categoryPresets' => $categoryPresets,
         ];

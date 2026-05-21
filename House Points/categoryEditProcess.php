@@ -30,6 +30,7 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
     
     $categoryID = $_POST['categoryID'] ?? null;
     $categoryName = $_POST['categoryName'] ?? null;
+    $categoryEvent = $_POST['categoryEvent'] ?? null;
     $categoryType = $_POST['categoryType'] ?? 'House';
     $categoryPresets = $_POST['categoryPresets'] ?? null;
 
@@ -38,6 +39,7 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
         
         $data = [
             'categoryName' => $categoryName,
+            'categoryEvent' => $categoryEvent,
             'categoryType' => $categoryType,
             'categoryPresets' => $categoryPresets,
         ];

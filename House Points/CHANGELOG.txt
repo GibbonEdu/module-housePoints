@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+v1.7.03
+-------
+Added a new Event field to each category
+
 v1.7.02
 -------
 Added the option to award points to multiple students
