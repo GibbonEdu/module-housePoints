@@ -32,15 +32,15 @@ if (!$session->has('gibbonPersonID') || !$session->has('gibbonRoleIDPrimary')
     $students = $_POST['students'] ?? [];
     $categoryID = $_POST['categoryID'] ?? null;
     $points = $_POST['points'] ?? null;
-    $reason = $_POST['reason'] ?? null;
+    $activity = $_POST['activity'] ?? null;
     $yearID = $_POST['yearID'] ?? null;
     $teacherID = $_POST['teacherID'] ?? null;
 
-    if (($students || $categoryID || $points || $reason || $yearID || $teacherID) != NULL) {
+    if (($students || $categoryID || $points || $activity || $yearID || $teacherID) != NULL) {
         $data = [
         'categoryID' => $categoryID,
         'points' => $points,
-        'reason' => $reason,
+        'activity' => $activity,
         'yearID' => $yearID,
         'awardedDate' => date('Y-m-d H:i:s'),
         'awardedBy' => $teacherID

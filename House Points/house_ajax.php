@@ -13,7 +13,7 @@ $sql = "SELECT hpPointHouse.hpID,
     DATE_FORMAT(hpPointHouse.awardedDate, '%d/%m/%Y') AS awardedDate,
     hpPointHouse.points, 
     hpCategory.categoryName,
-    hpPointHouse.reason, 
+    hpPointHouse.activity, 
     CONCAT(gibbonPerson.title, ' ', gibbonPerson.preferredName, ' ', gibbonPerson.surname) AS teacherName
     FROM hpPointHouse
     INNER JOIN hpCategory

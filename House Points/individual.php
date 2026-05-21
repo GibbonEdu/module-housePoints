@@ -58,7 +58,7 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/individual.php
         $table->addColumn('points', __('Points'));
         $table->addColumn('categoryName', __('Category'));
         $table->addColumn('categoryEvent', __('Event'));
-        $table->addColumn('reason', __('Reason'));
+        $table->addColumn('activity', __('Activity'));
         $table->addColumn('teacherName', __('Awarded By'));
     
         echo $table->render($housePoints);

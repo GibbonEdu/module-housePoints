@@ -64,10 +64,10 @@ if (isActionAccessible($guid, $connection2,"/modules/House Points/award.php")==F
             $row->addLabel('points', __('Points'));
             $row->addTextField('points')->disabled()->placeholder(__('Select a category'));
 
-        $reasons = $pdo->select("SELECT DISTINCT reason FROM hpPointHouse UNION SELECT DISTINCT reason from hpPointStudent ORDER BY reason")->fetchAll(\PDO::FETCH_COLUMN);
+        $activities = $pdo->select("SELECT DISTINCT activity FROM hpPointHouse UNION SELECT DISTINCT activity from hpPointStudent ORDER BY activity")->fetchAll(\PDO::FETCH_COLUMN);
         $row = $form->addRow();
-            $row->addLabel('reason', __('Activity'));
-            $row->addTextField('reason')->maxLength(100)->required()->autocomplete($reasons);
+            $row->addLabel('activity', __('Activity'));
+            $row->addTextField('activity')->maxLength(100)->required()->autocomplete($activities);
         
         $row = $form->addRow();
             $row->addAlert(__('If the activity name for awarding points already exists, ensure the text in the activity field is the same.'), "warning");

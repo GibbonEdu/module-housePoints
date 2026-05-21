@@ -140,7 +140,7 @@ class viewPoints implements ContainerAwareInterface
             $table = DataTable::createPaginated('hpCategoryEvents', $criteria);
             $table->setTitle($selectedEvent);
 
-            $table->addColumn('reason', __('Activity'));
+            $table->addColumn('activity', __('Activity'));
             $table->addColumn('points', __('Points'))->notSortable();
             $table->addColumn('houseName', __('House'));
             $table->addColumn('studentName', __('Student'));

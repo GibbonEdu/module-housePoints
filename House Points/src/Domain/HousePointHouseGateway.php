@@ -36,7 +36,7 @@ class HousePointHouseGateway extends QueryableGateway
                 'hpCategory.categoryName AS categoryName',
                 "COALESCE(gibbonHouse.name, '') AS houseName",
                 'hpPointStudent.points AS points',
-                'hpPointStudent.reason AS reason',
+                'hpPointStudent.activity AS activity',
                 'hpPointStudent.awardedDate AS awardedDate',
                 "CONCAT(gibbonPerson.preferredName, ' ', gibbonPerson.surname) AS studentName",
             ])
@@ -54,7 +54,7 @@ class HousePointHouseGateway extends QueryableGateway
                 'hpCategory.categoryName AS categoryName',
                 'gibbonHouse.name AS houseName',
                 'hpPointHouse.points AS points',
-                'hpPointHouse.reason AS reason',
+                'hpPointHouse.activity AS activity',
                 'hpPointHouse.awardedDate AS awardedDate',
                 'NULL AS studentName',
             ])
@@ -105,7 +105,7 @@ class HousePointHouseGateway extends QueryableGateway
         $select = $this
             ->newSelect()
             ->from('hpPointHouse')
-            ->cols(['hpPointHouse.hpID', 'DATE_FORMAT(hpPointHouse.awardedDate, \'%d/%m/%Y\') AS awardedDate','hpPointHouse.points', 'hpCategory.categoryName','hpPointHouse.reason', 'CONCAT(gibbonPerson.title, \' \', gibbonPerson.preferredName, \' \', gibbonPerson.surname) AS teacherName'])
+            ->cols(['hpPointHouse.hpID', 'DATE_FORMAT(hpPointHouse.awardedDate, \'%d/%m/%Y\') AS awardedDate','hpPointHouse.points', 'hpCategory.categoryName','hpPointHouse.activity', 'CONCAT(gibbonPerson.title, \' \', gibbonPerson.preferredName, \' \', gibbonPerson.surname) AS teacherName'])
             ->innerJoin('hpCategory','hpCategory.categoryID = hpPointHouse.categoryID')
             ->innerJoin('gibbonPerson','gibbonPerson.gibbonPersonID = hpPointHouse.awardedBy')
             ->innerJoin('gibbonHouse','gibbonHouse.gibbonHouseID = hpPointHouse.houseID')
