@@ -18,15 +18,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-use Gibbon\Module\HousePoints\viewPoints;
+use Gibbon\Module\HousePoints\ViewPoints;
 
 require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointHouseGateway.php';
 require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointCategoryGateway.php';
-require_once $session->get('absolutePath').'/modules/House Points/src/viewPoints.php';
+require_once $session->get('absolutePath').'/modules/House Points/src/ViewPoints.php';
 global $container;
 
-$view = $container->get(viewPoints::class);
+$view = $container->get(ViewPoints::class);
 
 // Total Points TABLE
 $hook  = $view->renderOverallPoints();
