@@ -1,0 +1,49 @@
+details:
+    type: pointStudent
+    category: House Points
+    name: Award Student Points
+    table: hpPointStudent
+    modes: { update: true, insert: true, export: true }
+access:
+    module: House Points
+    action: Award student points_unlimited
+primaryKey:
+    hpID
+uniqueKeys:
+    - studentID
+    - categoryID
+    - awardedDate
+    - activity
+table:
+    studentID:
+        name: "Student"
+        desc: "Username or Email (if unique)"
+        args: { filter: nospaces, required: true }
+        relationship: { table: gibbonPerson, key: gibbonPersonID, field: username|email }
+    categoryID:
+        name: "Category"
+        desc: "Category Name"
+        args: { filter: string, required: true }
+        relationship: { table: hpCategory, key: categoryID, field: categoryName }
+    points:
+        name: "Points"
+        desc: ""
+        args: { filter: numeric, required: true }
+    activity:
+        name: "Activity"
+        desc: "Activity Name"
+        args: { filter: string, required: true }
+    yearID:
+        name: "School Year"
+        desc: "School year name, as set in School Admin. Must already exist."
+        args: { filter: string, required: true }
+        relationship: { table: gibbonSchoolYear, key: gibbonSchoolYearID, field: name }
+    awardedDate:
+        name: "Awarded Date"
+        desc: "Date Awarded"
+        args: { filter: date, required: true }
+    awardedBy:
+        name: "Imported By"
+        desc: "Username or Email (if unique)"
+        args: { filter: nospaces, required: true }
+        relationship: { table: gibbonPerson, key: gibbonPersonID, field: username|email }
