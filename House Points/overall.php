@@ -22,7 +22,7 @@ use Gibbon\Module\HousePoints\viewPoints;
 
 require_once __DIR__ . '/moduleFunctions.php';
 
-$page->breadcrumbs->add(__('View points overall'));
+$page->breadcrumbs->add(__('View Points Overall'));
 
 if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php') == false) {
     // Access Denied
@@ -30,12 +30,9 @@ if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php')
 } else {
     $view = $container->get(viewPoints::class);
 
-    // POINT TOTALS DATATABLE
+    // Total Points TABLE
     echo $view->renderOverallPoints();
 
-    // EVENT POINTS DATATABLE
-    echo $view->renderByEvents();
-
-    // HALL OF FAME DATATABLE
+    // HALL OF FAME TABLE
     echo $view->renderHallOfFame();
 }

@@ -12,26 +12,24 @@ the Free Software Foundation, either version 3 of the License, or
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 use Gibbon\Module\HousePoints\viewPoints;
 
-require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointHouseGateway.php';
-require_once $session->get('absolutePath').'/modules/House Points/src/Domain/HousePointCategoryGateway.php';
-require_once $session->get('absolutePath').'/modules/House Points/src/viewPoints.php';
-global $container;
+require_once __DIR__ . '/moduleFunctions.php';
 
-$view = $container->get(viewPoints::class);
+$page->breadcrumbs->add(__('View Points By Events'));
 
-// Total Points TABLE
-$hook  = $view->renderOverallPoints();
-
-// HALL OF FAME TABLE
-$hook .= $view->renderHallOfFame();
-
-return $hook;
+if (isActionAccessible($guid, $connection2, '/modules/House Points/overall_events.php') == false) {
+    // Access Denied
+    $page->addError(__('You do not have access to this action.'));
+} else {
+    $view = $container->get(viewPoints::class);
+    
+    // EVENT POINTS TABLE
+    echo $view->renderByEvents();
+}
