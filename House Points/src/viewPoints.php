@@ -39,7 +39,7 @@ use Gibbon\Module\HousePoints\Domain\HousePointCategoryGateway;
  * @version v31
  * @since   v31
  */
-class viewPoints implements ContainerAwareInterface
+class ViewPoints implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
