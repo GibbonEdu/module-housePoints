@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+v1.7.04
+-------
+Added a new View Points By Events Page
 
 v1.7.03
 -------

@@ -18,24 +18,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-use Gibbon\Module\HousePoints\viewPoints;
+use Gibbon\Module\HousePoints\ViewPoints;
 
 require_once __DIR__ . '/moduleFunctions.php';
 
-$page->breadcrumbs->add(__('View points overall'));
+$page->breadcrumbs->add(__('View Points Overall'));
 
 if (isActionAccessible($guid, $connection2, '/modules/House Points/overall.php') == false) {
     // Access Denied
     $page->addError(__('You do not have access to this action.'));
 } else {
-    $view = $container->get(viewPoints::class);
+    $view = $container->get(ViewPoints::class);
 
-    // POINT TOTALS DATATABLE
+    // Total Points TABLE
     echo $view->renderOverallPoints();
 
-    // EVENT POINTS DATATABLE
-    echo $view->renderByEvents();
-
-    // HALL OF FAME DATATABLE
+    // HALL OF FAME TABLE
     echo $view->renderHallOfFame();
 }

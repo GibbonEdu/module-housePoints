@@ -39,7 +39,7 @@ use Gibbon\Module\HousePoints\Domain\HousePointCategoryGateway;
  * @version v31
  * @since   v31
  */
-class viewPoints implements ContainerAwareInterface
+class ViewPoints implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -60,7 +60,7 @@ class viewPoints implements ContainerAwareInterface
     /**
      * Section 1: Overall house point totals for the current school year.
      */
-    public function renderOverallPoints($linkToEvents = false)
+    public function renderOverallPoints()
     {
         $yearID = $this->session->get('gibbonSchoolYearID');
         $pointsList = $this->housePointHouseGateway->selectAllPoints($yearID);
@@ -68,14 +68,12 @@ class viewPoints implements ContainerAwareInterface
         $gridRenderer = new GridView($this->getContainer()->get('twig'));
         $table = DataTable::create('hpOverall', $gridRenderer);
         $table->setTitle(__('Overall House Points'));
-        $table->addMetaData('hidePagination', !$linkToEvents);
+        $table->addMetaData('hidePagination', false);
         $table->addMetaData('gridItemClass', 'w-1/2 sm:w-1/4 md:w-1/3 my-2 text-center');
 
-        if ($linkToEvents) {
-            $table->addHeaderAction('view', __('House Points By Events'))
-                ->displayLabel()
-                ->setURL('/modules/House Points/overall.php');
-        }
+        $table->addHeaderAction('view', __('House Points By Events'))
+            ->displayLabel()
+            ->setURL('/modules/House Points/overall_events.php');
 
         $table->addColumn('Crest')
             ->format(function ($row) {
@@ -111,7 +109,7 @@ class viewPoints implements ContainerAwareInterface
         $form = Form::create('hpEventSelectorForm', $absoluteURL . '/index.php', 'get');
         $form->setTitle(__('House Points By Events'));
         $form->setClass('noIntBorder w-full');
-        $form->addHiddenValue('q', '/modules/House Points/overall.php');
+        $form->addHiddenValue('q', '/modules/House Points/overall_events.php');
 
         $row = $form->addRow();
             $row->addLabel('hpEvent', __('Event'));

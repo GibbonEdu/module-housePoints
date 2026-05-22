@@ -118,3 +118,13 @@ ALTER TABLE hpCategory ADD categoryEvent VARCHAR(90) NOT NULL AFTER categoryName
 ALTER TABLE `hpPointHouse` CHANGE `reason` `activity` varchar(255) DEFAULT NULL;end
 ALTER TABLE `hpPointStudent` CHANGE `reason` `activity` varchar(255) DEFAULT NULL;end
 ";
+
+//v1.7.04
+++$count;
+$sql[$count][0] = '1.7.04';
+$sql[$count][1] = "
+INSERT INTO `gibbonAction` (`gibbonModuleID`, `name`, `precedence`, `category`, `description`, `helpURL`, `URLList`, `entryURL`, `entrySidebar`, `menuShow`, `defaultPermissionAdmin`, `defaultPermissionTeacher`, `defaultPermissionStudent`, `defaultPermissionParent`, `defaultPermissionSupport`, `categoryPermissionStaff`, `categoryPermissionStudent`, `categoryPermissionParent`, `categoryPermissionOther`) VALUES ((SELECT gibbonModuleID FROM gibbonModule WHERE name='House Points'), 'View points event', '4', 'View', 'View points for house and students by events.', '', 'overall_events.php', 'overall_events.php', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y');end
+INSERT INTO `gibbonPermission` (`gibbonRoleID` ,`gibbonActionID`) VALUES (001, (SELECT gibbonActionID FROM gibbonAction JOIN gibbonModule ON (gibbonAction.gibbonModuleID=gibbonModule.gibbonModuleID) WHERE gibbonModule.name='House Points' AND gibbonAction.name='View points overall_events'));end
+INSERT INTO `gibbonPermission` (`gibbonRoleID` ,`gibbonActionID`) VALUES (002, (SELECT gibbonActionID FROM gibbonAction JOIN gibbonModule ON (gibbonAction.gibbonModuleID=gibbonModule.gibbonModuleID) WHERE gibbonModule.name='House Points' AND gibbonAction.name='View points overall_events'));end
+INSERT INTO `gibbonPermission` (`gibbonRoleID` ,`gibbonActionID`) VALUES (003, (SELECT gibbonActionID FROM gibbonAction JOIN gibbonModule ON (gibbonAction.gibbonModuleID=gibbonModule.gibbonModuleID) WHERE gibbonModule.name='House Points' AND gibbonAction.name='View points overall_events'));end
+";
